@@ -1,4 +1,9 @@
+// ignore_for_file: prefer_const_constructors, unnecessary_new
+
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/screens/addrecipe.dart';
+import 'package:flutter_application_1/screens/my_courses.dart';
+import 'package:flutter_application_1/screens/quiz.dart';
 import 'package:flutter_application_1/screens/search.dart';
 import 'package:flutter_application_1/screens/studentlist.dart';
 import 'package:flutter_application_1/screens/week3.dart';
@@ -8,7 +13,8 @@ import 'screens/basket.dart';
 import 'screens/home.dart';
 import 'screens/search.dart';
 import 'screens/history.dart';
-
+import 'screens/my_courses.dart';
+import 'screens/addrecipe.dart';
 void main() {
   runApp(const MyApp());
 }
@@ -31,7 +37,7 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
-        primarySwatch: Colors.red,
+        primarySwatch: Colors.lightBlue,
       ),
       home: const MyHomePage(title: 'Flutter App'),
       routes: {
@@ -42,6 +48,9 @@ class MyApp extends StatelessWidget {
         'history': (context) => History(),
         'student': (context) => StudentList(),
         'week3': (context) => Week3(),
+        'mycourse': (context) => MyCourse(), 
+        'addrecipe': (context) => AddRecipe(), 
+        'quiz': (context) => Quiz(),
       },
     );
   }
@@ -102,7 +111,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           ListTile(
             title: new Text("Week 3"),
-            leading: new Icon(Icons.help),
+            leading: new Icon(Icons.widgets),
             onTap: () {
               Navigator.pushNamed(context, "week3");
             },
@@ -128,7 +137,28 @@ class _MyHomePageState extends State<MyHomePage> {
             onTap: (() {
               Navigator.pushNamed(context, "student");
             }),
-          )
+          ),
+          ListTile(
+            title: new Text('Course'),
+            leading: new Icon(Icons.cast_for_education),
+            onTap: (() {
+              Navigator.pushNamed(context, "mycourse");
+            }),
+          ),
+          ListTile(
+            title: new Text('Add Recipe'),
+            leading: new Icon(Icons.receipt_outlined),
+            onTap: (() {
+              Navigator.pushNamed(context, "addrecipe");
+            }),
+          ),
+          ListTile(
+            title: new Text('Quiz'),
+            leading: new Icon(Icons.circle_rounded),
+            onTap: (() {
+              Navigator.pushNamed(context, "quiz");
+            }),
+          ),
         ],
       ),
     );
@@ -176,6 +206,7 @@ class _MyHomePageState extends State<MyHomePage> {
           });
         },
         fixedColor: Colors.green,
+        // ignore: prefer_const_literals_to_create_immutables
         items: [
           BottomNavigationBarItem(
             label: "Home",
