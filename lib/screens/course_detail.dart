@@ -11,6 +11,11 @@ class CourseDetail extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Course $course'),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.arrow_back_ios_new)),
       ),
       body: Column(
         children: <Widget>[
@@ -24,7 +29,8 @@ class CourseDetail extends StatelessWidget {
                 '$course',
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
               ),
             ),
           ),

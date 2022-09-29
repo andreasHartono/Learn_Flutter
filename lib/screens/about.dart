@@ -7,7 +7,13 @@ class About extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('About'),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.arrow_back_ios_new)),
       ),
+      // ignore: prefer_const_constructors
       body: Center(
         child: Text('This is About'),
       ),

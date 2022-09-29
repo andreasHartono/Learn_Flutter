@@ -15,6 +15,7 @@ import 'screens/search.dart';
 import 'screens/history.dart';
 import 'screens/my_courses.dart';
 import 'screens/addrecipe.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -48,8 +49,8 @@ class MyApp extends StatelessWidget {
         'history': (context) => History(),
         'student': (context) => StudentList(),
         'week3': (context) => Week3(),
-        'mycourse': (context) => MyCourse(), 
-        'addrecipe': (context) => AddRecipe(), 
+        'mycourse': (context) => MyCourse(),
+        'addrecipe': (context) => AddRecipe(),
         'quiz': (context) => Quiz(),
       },
     );
@@ -180,6 +181,11 @@ class _MyHomePageState extends State<MyHomePage> {
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(_title[_currentIndex]),
+        // title: new Container(
+        //     margin: EdgeInsets.symmetric(vertical: 1.0, horizontal: 1.0),
+        //     child: row(
+        //       childern
+        //     )),
       ),
       drawer: myDrawer(),
       body: _screens[_currentIndex],

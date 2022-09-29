@@ -34,6 +34,11 @@ class _BasketState extends State<Basket> {
     return Scaffold(
         appBar: AppBar(
           title: Text('Basket'),
+          leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: Icon(Icons.arrow_back_ios_new)),
         ),
         body: SingleChildScrollView(
           child: Column(children: [

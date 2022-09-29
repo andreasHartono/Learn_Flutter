@@ -41,6 +41,11 @@ class _AddRecipeState extends State<AddRecipe> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Add Recipe'),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.arrow_back_ios_new)),
       ),
       body: Column(
         children: [

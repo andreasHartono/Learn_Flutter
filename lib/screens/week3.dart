@@ -56,6 +56,11 @@ class Week3 extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: Text('About'),
+          leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: Icon(Icons.arrow_back_ios_new)),
         ),
         body: SingleChildScrollView(
             child: Column(children: [

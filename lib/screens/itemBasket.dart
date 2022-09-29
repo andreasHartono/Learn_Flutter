@@ -10,6 +10,11 @@ class ItemBasket extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Item Basket'),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.arrow_back_ios_new)),
       ),
       body: Center(
         child: Text("Item $id count=$count"),

@@ -118,6 +118,11 @@ class _QuizState extends State<Quiz> {
     return Scaffold(
         appBar: AppBar(
           title: Text('Quiz'),
+          leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: Icon(Icons.arrow_back_ios_new)),
         ),
         body: Center(
             child: Column(children: <Widget>[
