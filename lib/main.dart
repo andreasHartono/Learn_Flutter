@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/addrecipe.dart';
 import 'package:flutter_application_1/screens/my_courses.dart';
+import 'package:flutter_application_1/screens/popularmovie.dart';
 import 'package:flutter_application_1/screens/quiz.dart';
 import 'package:flutter_application_1/screens/search.dart';
 import 'package:flutter_application_1/screens/studentlist.dart';
@@ -52,6 +53,7 @@ class MyApp extends StatelessWidget {
         'mycourse': (context) => MyCourse(),
         'addrecipe': (context) => AddRecipe(),
         'quiz': (context) => Quiz(),
+        'popularmovie':(context) => PopularMovie(),
       },
     );
   }
@@ -158,6 +160,13 @@ class _MyHomePageState extends State<MyHomePage> {
             leading: new Icon(Icons.circle_rounded),
             onTap: (() {
               Navigator.pushNamed(context, "quiz");
+            }),
+          ),
+          ListTile(
+            title: new Text('Popular Movie'),
+            leading: new Icon(Icons.circle_rounded),
+            onTap: (() {
+              Navigator.pushNamed(context, "popularmovie");
             }),
           ),
         ],
