@@ -8,17 +8,35 @@ import 'package:flutter_application_1/screens/quiz.dart';
 import 'package:flutter_application_1/screens/search.dart';
 import 'package:flutter_application_1/screens/studentlist.dart';
 import 'package:flutter_application_1/screens/week3.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'screens/about.dart';
 import 'screens/basket.dart';
 import 'screens/home.dart';
+import 'screens/login.dart';
 import 'screens/search.dart';
 import 'screens/history.dart';
 import 'screens/my_courses.dart';
 import 'screens/addrecipe.dart';
 
+String active_user = "";
+
+Future<String> checkUser() async {
+  final prefs = await SharedPreferences.getInstance();
+  String user_id = prefs.getString("user_id") ?? '';
+  return user_id;
+}
+
 void main() {
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  checkUser().then((String result) {
+    if (result == '')
+      runApp(MyLogin());
+    else {
+      active_user = result;
+      runApp(MyApp());
+    }
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -53,7 +71,7 @@ class MyApp extends StatelessWidget {
         'mycourse': (context) => MyCourse(),
         'addrecipe': (context) => AddRecipe(),
         'quiz': (context) => Quiz(),
-        'popularmovie':(context) => PopularMovie(),
+        'popularmovie': (context) => PopularMovie(),
       },
     );
   }

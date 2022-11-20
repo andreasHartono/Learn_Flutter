@@ -1,10 +1,12 @@
-// ignore_for_file: unused_import, use_key_in_widget_constructors, unnecessary_new, prefer_const_constructors
+// ignore_for_file: unnecessary_new
 
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/class/popMovie.dart';
+import 'package:flutter_application_1/screens/detailpop.dart';
 import 'package:http/http.dart' as http;
+
+import '../class/popmovie.dart';
 
 class PopularMovie extends StatefulWidget {
   @override
@@ -14,11 +16,15 @@ class PopularMovie extends StatefulWidget {
 }
 
 class _PopularMovieState extends State<PopularMovie> {
-  String _temp = 'waiting API respond...';
+  String _temp = 'waiting API respond…';
+  List<PopMovie> PMs = [];
+  String _txtcari = "";
 
   Future<String> fetchData() async {
-    final response = await http
-        .get(Uri.https("ubaya.fun", "/flutter/160417130/movielist.php"));
+    final response = await http.post(
+        Uri.parse("https://ubaya.fun/flutter/160419047/movielist.php"),
+        body: {'cari': _txtcari});
+
     if (response.statusCode == 200) {
       return response.body;
     } else {
@@ -27,26 +33,20 @@ class _PopularMovieState extends State<PopularMovie> {
   }
 
   bacaData() {
+    PMs.clear();
     Future<String> data = fetchData();
     data.then((value) {
       Map json = jsonDecode(value);
       for (var mov in json['data']) {
-        PopMovie pm = new PopMovie.fromJson(mov);
+        PopMovie pm = PopMovie.fromJson(mov);
         PMs.add(pm);
       }
       setState(() {
-        _temp = PMs[2].overview;
+        //_temp = PMs[61].title;
       });
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    bacaData();
-  }
-
-  // Daftar Pop Movie 1
   Widget DaftarPopMovie(PopMovs) {
     if (PopMovs != null) {
       return ListView.builder(
@@ -58,8 +58,18 @@ class _PopularMovieState extends State<PopularMovie> {
               children: <Widget>[
                 ListTile(
                   leading: Icon(Icons.movie, size: 30),
-                  title: Text(PopMovs[index].title),
-                  subtitle: Text(PopMovs[index].overview),
+                  title: GestureDetector(
+                      child: Text(PopMovs[index].title),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                DetailPop(movieID: PMs[index].id),
+                          ),
+                        );
+                      }),
+                  subtitle: Text(PMs[index].overview),
                 ),
               ],
             ));
@@ -69,7 +79,13 @@ class _PopularMovieState extends State<PopularMovie> {
     }
   }
 
-  // Daftar Pop Movie 2
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    bacaData();
+  }
+
   Widget DaftarPopMovie2(data) {
     List<PopMovie> PMs2 = [];
     Map json = jsonDecode(data);
@@ -94,17 +110,23 @@ class _PopularMovieState extends State<PopularMovie> {
         });
   }
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Popular Movie'),
-      ),
-      body: ListView(
-        children: <Widget>[
+        appBar: AppBar(title: const Text('Popular Movie')),
+        body: ListView(children: <Widget>[
+          TextFormField(
+            decoration: const InputDecoration(
+              icon: Icon(Icons.search),
+              labelText: 'Judul mengandung kata:',
+            ),
+            onFieldSubmitted: (value) {
+              _txtcari = value;
+              bacaData();
+            },
+          ),
           Container(
-            height: MediaQuery.of(context).size.height - 200,
+            height: MediaQuery.of(context).size.height / 2,
             child: DaftarPopMovie(PMs),
           ),
           Container(
@@ -117,9 +139,7 @@ class _PopularMovieState extends State<PopularMovie> {
                     } else {
                       return Center(child: CircularProgressIndicator());
                     }
-                  })),
-        ],
-      ),
-    );
+                  }))
+        ]));
   }
 }
