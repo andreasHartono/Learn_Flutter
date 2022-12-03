@@ -1,6 +1,6 @@
-# flutter_application_1
+# Learn Flutter
 
-A new Flutter project.
+Emerging Technology Learning project.
 
 ## Getting Started
 
