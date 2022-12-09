@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../class/popmovie.dart';
+import 'editpopmovie.dart';
 
 class DetailPop extends StatefulWidget {
   int movieID;
@@ -33,12 +34,36 @@ class _DetailPopState extends State<DetailPop> {
     }
   }
 
+  void delete() async {
+    final response = await http.post(
+        Uri.parse("https://ubaya.fun/flutter/160419047/deletemovie.php"),
+        body: {'movie_id': widget.movieID.toString()});
+    if (response.statusCode == 200) {
+      Map json = jsonDecode(response.body);
+      if (json['result'] == 'success') {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Sukses Hapus Data')));
+      }
+    } else {
+      throw Exception('Failed to read API');
+    }
+  }
+
   bacaData() {
     fetchData().then((value) {
       Map json = jsonDecode(value);
       _pm = PopMovie.fromJson(json['data']);
       setState(() {});
     });
+  }
+
+  Color getButtonColor(Set<MaterialState> states) {
+    if (states.contains(MaterialState.pressed)) {
+      return Colors.blueAccent;
+    } else {
+      return Colors.orangeAccent;
+    }
   }
 
   Widget tampilData() {
@@ -82,6 +107,57 @@ class _DetailPopState extends State<DetailPop> {
                     itemBuilder: (BuildContext ctxt, int index) {
                       return Text(_pm?.persons?[index]['character_name']);
                     })),
+            Padding(
+                padding: const EdgeInsets.all(10),
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: _pm?.persons?.length,
+                    itemBuilder: (BuildContext ctxt, int index) {
+                      return Text(_pm?.persons?[index]['character_name']);
+                    })),
+            Padding(
+                padding: EdgeInsets.all(10),
+                child: ElevatedButton(
+                  child: Text('Edit'),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            EditPopMovie(movie_id: widget.movieID),
+                      ),
+                    );
+                  },
+                )),
+            ElevatedButton(
+                style: ButtonStyle(
+                  elevation: MaterialStateProperty.all(5),
+                  backgroundColor:
+                      MaterialStateProperty.resolveWith(getButtonColor),
+                ),
+                onPressed: () {
+                  setState(() {
+                    // showDialog<String>(
+                    //     context: context,
+                    //     builder: (BuildContext context) => AlertDialog(
+                    //           title: Text('Delete Movie ' + _pm!.title + ' ?'),
+                    //           content:
+                    //               Text('Are You sure to delete this movie ?'),
+                    //           actions: <Widget>[
+                    //             TextButton(
+                    //               onPressed: () => delete(),
+                    //               child: Text('YES'),
+                    //             ),
+                    //             TextButton(
+                    //               onPressed: null,
+                    //               child: Text('NO'),
+                    //             ),
+                    //           ],
+                    //         ));
+                    delete();
+                  });
+                },
+                child: Text('DELETE MOVIE ' + _pm!.title)),
           ]));
     }
   }
