@@ -75,6 +75,8 @@ class _DetailPopState extends State<DetailPop> {
           margin: const EdgeInsets.all(10),
           child: Column(children: <Widget>[
             Text(_pm!.title, style: const TextStyle(fontSize: 25)),
+            Image.network(
+                "https://ubaya.fun/flutter/160417130/images/${widget.movieID}.jpg"),
             Padding(
                 padding: const EdgeInsets.all(10),
                 child:

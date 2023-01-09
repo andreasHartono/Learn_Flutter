@@ -6,6 +6,15 @@ import 'package:numberpicker/numberpicker.dart';
 
 import '../class/genre.dart';
 import '../class/popmovie.dart';
+import 'package:image/image.dart' as img;
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+
+import 'package:image_picker/image_picker.dart';
+import 'package:numberpicker/numberpicker.dart';
+import 'package:path_provider/path_provider.dart';
+
+import '../main.dart';
 
 class EditPopMovie extends StatefulWidget {
   int movie_id;
@@ -23,7 +32,8 @@ class EditPopMovieState extends State<EditPopMovie> {
   TextEditingController _overviewCont = new TextEditingController();
   TextEditingController _releaseDate = new TextEditingController();
   int _runtime = 100;
-
+  // Widget comboGenre = const Text('tambah genre');
+  File? _image, _imageProses;
   PopMovie pm = PopMovie(
       id: 0,
       title: "",
@@ -79,8 +89,25 @@ class EditPopMovieState extends State<EditPopMovie> {
       print(response.body);
       Map json = jsonDecode(response.body);
       if (json['result'] == 'success') {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Sukses mengubah Data')));
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Sukses mengubah Data')));
+        if (_imageProses == null) return;
+        List<int> imageBytes = _imageProses!.readAsBytesSync();
+        String base64Image = base64Encode(imageBytes);
+        final response2 = await http.post(
+            Uri.parse(
+                'https://ubaya.fun/flutter/160417130/uploadpopmovieposter.php'),
+            body: {
+              'movie_id': widget.movie_id.toString(),
+              'image': base64Image,
+            });
+        if (response2.statusCode == 200) {
+          if (!mounted) return;
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(response2.body)));
+          Navigator.of(context).pop();
+        }
       }
     } else {
       throw Exception('Failed to read API');
@@ -340,8 +367,89 @@ class EditPopMovieState extends State<EditPopMovie> {
               Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: comboGenre),
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: GestureDetector(
+                    onTap: () => _showPicker(context),
+                    child: _imageProses != null
+                        ? Image.file(_imageProses!)
+                        : Image.network("https://ubaya.fun/blank.jpg")),
+              ),
             ],
           ),
         ));
+  }
+
+  _showPicker(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return SafeArea(
+            child: Container(
+              color: Colors.white,
+              child: Wrap(
+                children: <Widget>[
+                  ListTile(
+                    tileColor: Colors.white,
+                    leading: const Icon(Icons.photo_library),
+                    title: const Text('Galeri'),
+                    onTap: () {
+                      _imgGaleri();
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.photo_camera),
+                    title: const Text('Kamera'),
+                    onTap: () {
+                      _imgKamera();
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  _imgGaleri() async {
+    final picker = ImagePicker();
+    final image = await picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 50,
+        maxHeight: 600,
+        maxWidth: 600);
+    if (image == null) return;
+    setState(() {
+      _imageProses = File(image.path);
+    });
+  }
+
+  _imgKamera() async {
+    final picker = ImagePicker();
+    final image =
+        await picker.pickImage(source: ImageSource.camera, imageQuality: 20);
+    if (image == null) return;
+    //setState(() {
+    _image = File(image.path);
+    prosesFoto();
+    //});
+  }
+
+  void prosesFoto() {
+    Future<Directory?> extDir = getTemporaryDirectory();
+    extDir.then((value) {
+      String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
+      final String filePath = '${value?.path}/$timestamp.jpg';
+      _imageProses = File(filePath);
+      img.Image? temp = img.decodeJpg(_image!.readAsBytesSync());
+      img.Image temp2 = img.copyResize(temp!, width: 480, height: 640);
+      img.drawString(temp2, img.arial_48, 4, 4, '${active_user}_${DateTime.now()}',
+          color: img.getColor(250, 100, 100));
+      setState(() {
+        _imageProses?.writeAsBytesSync(img.writeJpg(temp2));
+      });
+    });
   }
 }
