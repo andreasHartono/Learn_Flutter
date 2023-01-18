@@ -149,7 +149,7 @@ class _PopularMovieState extends State<PopularMovie> {
               child: Text('ADD NEW MOVIE')),
           Padding(padding: EdgeInsets.all(10.0)),
           Container(
-            height: MediaQuery.of(context).size.height / 2,
+            height: MediaQuery.of(context).size.height,
             child: DaftarPopMovie(PMs),
           ),
           // Container(

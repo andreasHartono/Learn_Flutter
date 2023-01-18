@@ -158,26 +158,6 @@ class EditPopMovieState extends State<EditPopMovie> {
     });
   }
 
-  // void DeleteGenre() {
-  //   //widget function for city list
-  //   List<Genre> genres;
-  //   var data = daftarGenre();
-  //   data.then((value) {
-  //     genres = List<Genre>.from(value.map((i) {
-  //       return Genre.fromJSON(i);
-  //     }));
-  //     comboGenre = ElevatedButton(
-  //         style: ButtonStyle(
-  //           elevation: MaterialStateProperty.all(5),
-  //           backgroundColor: MaterialStateProperty.resolveWith(getButtonColor),
-  //         ),
-  //         onPressed: () {
-  //           deletechild(genres['genre_id']);
-  //         },
-  //         child: Text('X'));
-  //   });
-  // }
-
   void addGenre(genre_id) async {
     final response = await http.post(
         Uri.parse("https://ubaya.fun/flutter/160419047/addmoviegenre.php"),

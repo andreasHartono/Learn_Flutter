@@ -139,23 +139,6 @@ class _DetailPopState extends State<DetailPop> {
                 ),
                 onPressed: () {
                   setState(() {
-                    // showDialog<String>(
-                    //     context: context,
-                    //     builder: (BuildContext context) => AlertDialog(
-                    //           title: Text('Delete Movie ' + _pm!.title + ' ?'),
-                    //           content:
-                    //               Text('Are You sure to delete this movie ?'),
-                    //           actions: <Widget>[
-                    //             TextButton(
-                    //               onPressed: () => delete(),
-                    //               child: Text('YES'),
-                    //             ),
-                    //             TextButton(
-                    //               onPressed: null,
-                    //               child: Text('NO'),
-                    //             ),
-                    //           ],
-                    //         ));
                     delete();
                   });
                 },
